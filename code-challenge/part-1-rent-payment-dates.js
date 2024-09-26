@@ -42,7 +42,7 @@ class RentProcessor {
   }
 }
 
-// Example 1:
+// Scenario 1:
 
 const example1 = {
   rentAmount: 1000,
@@ -57,60 +57,6 @@ const paymentDates1 = rentProcessor1.calculatePaymentDates()
 console.log(paymentDates1)
 // Expected output: ["2024-01-01", "2024-02-01", "2024-03-01"]
 
-// Example 2:
-
-const example2 = {
-  rentAmount: 1000,
-  rentFrequency: 'fortnightly',
-  rentStartDate: '2024-01-01',
-  rentEndDate: '2024-04-01'
-}
-
-const rentProcessor2 = new RentProcessor(example2)
-const paymentDates2 = rentProcessor2.calculatePaymentDates()
-
-console.log(paymentDates2)
-
-// Expected output:
-// 2024-01-01
-// 2024-01-15
-// 2024-01-29
-// 2024-02-12
-// 2024-02-26
-// 2024-03-11
-// 2024-03-25
-
-// Example 3:
-
-const example3 = {
-  rentAmount: 1000,
-  rentFrequency: 'weekly',
-  rentStartDate: '2024-01-01',
-  rentEndDate: '2024-04-01'
-}
-
-const rentProcessor3 = new RentProcessor(example3)
-const paymentDates3 = rentProcessor3.calculatePaymentDates()
-
-console.log(paymentDates3)
-
-// Expected output:
-// 2024-01-01
-// 2024-01-08
-// 2024-01-15
-// 2024-01-22
-// 2024-01-29
-// 2024-02-05
-// 2024-02-12
-// 2024-02-19
-// 2024-02-26
-// 2024-03-04
-// 2024-03-11
-// 2024-03-18
-// 2024-03-25
-
-// ---
-
 // Notes
 
 /**
@@ -124,3 +70,5 @@ console.log(paymentDates3)
  *
  * One recommended approach is to use a currency library such as Dinero.js in JavaScript
  */
+
+module.exports = { RentProcessor }

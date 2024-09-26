@@ -116,3 +116,5 @@ console.log(rentProcessor.calculatePaymentDates())
 // { date: "2024-02-01", amount: 1000 },
 // { date: "2024-03-01", amount: 1200 }
 // ]
+
+module.exports = { RentProcessor }

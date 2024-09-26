@@ -128,3 +128,5 @@ console.log(paymentDates)
 // },
 // // { paymentDate: "2024-03-03", amount: 1000, method: "creditCard" }
 // // ]
+
+module.exports = { RentProcessor }
