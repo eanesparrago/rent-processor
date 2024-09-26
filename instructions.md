@@ -15,6 +15,8 @@ containing the following properties:
 
 The application should return an array of rent payment dates based on the rent frequency.
 
+---
+
 Part 2: Handling Rent Changes
 
 Extend the application to handle rent changes. The class should now accept a new input object
@@ -31,6 +33,8 @@ When a rent change is received, the class should:
    correct rent amount at each point in time.
    Return an array of rent payment dates and their respective rent amounts.
 
+---
+
 Part 3: Payment Method Consideration
 
 Add a new field called paymentMethod to the rent object. The payment method can be one of
@@ -46,6 +50,8 @@ the selected payment method.
 Expected Outcome
 
 An array of rent payment dates, correctly adjusted for rent changes and payment methods.
+
+---
 
 Example Scenarios:
 

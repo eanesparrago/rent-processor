@@ -1,6 +1,6 @@
-/**
- * rentFrequency: 'weekly' | 'fortnightly' | 'monthly'
- */
+/*
+Part 1: Rent Payment Dates Calculation
+*/
 
 class RentProcessor {
   constructor (rent) {
