@@ -54,7 +54,7 @@ const example1 = {
 const rentProcessor1 = new RentProcessor(example1)
 const paymentDates1 = rentProcessor1.calculatePaymentDates()
 
-console.log(paymentDates1)
+// console.log(paymentDates1)
 // Expected output: ["2024-01-01", "2024-02-01", "2024-03-01"]
 
 // Notes

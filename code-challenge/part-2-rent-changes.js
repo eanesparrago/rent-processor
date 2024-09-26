@@ -23,6 +23,8 @@ class RentProcessor {
 
       let amount = rentAmount
 
+      // TODO: Handle logic for calculating the last rent amount (should be deducted based on the rent end date)
+
       if (this.rentChanges.length) {
         const foundRentChange = this.rentChanges.find(
           rentChange => currentDate >= new Date(rentChange.effectiveDate)
@@ -109,7 +111,7 @@ rentProcessor.applyRentChange({
 //   effectiveDate: '2024-03-01'
 // })
 
-console.log(rentProcessor.calculatePaymentDates())
+// console.log(rentProcessor.calculatePaymentDates())
 // Expected output:
 // [
 // { date: "2024-01-01", amount: 1000 },
