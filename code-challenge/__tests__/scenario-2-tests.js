@@ -91,7 +91,7 @@ describe('RentProcessor', () => {
         const rent = { rentAmount, rentFrequency, rentStartDate, rentEndDate }
         const rentProcessor = new RentProcessor(rent)
 
-        rentChanges.forEach(change => {
+        rentChanges?.forEach(change => {
           rentProcessor.applyRentChange(change)
         })
 
