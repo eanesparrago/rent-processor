@@ -4,11 +4,10 @@
 
 This exercise is divided into 3 parts.
 
-.
-└── code-challenge/
-├── part-1-rent-payment-dates.js
-├── part-2-rent-changes.js
-└── part-3-payment-method.js
+/code-challenge
+- /part-1-rent-payment-dates.js
+- /part-2-rent-changes.js
+- /part-3-payment-method.js
 
 ## Run Tests
 
