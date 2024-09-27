@@ -4,7 +4,12 @@ Part 2: Handling Rent Changes
 
 class RentProcessor {
   constructor (rent) {
-    this.rent = rent
+    this.rent = {
+      rentAmount: rent.rentAmount,
+      rentFrequency: rent.rentFrequency,
+      rentStartDate: new Date(rent.rentStartDate),
+      rentEndDate: new Date(rent.rentEndDate)
+    }
     this.rentChanges = []
   }
 
@@ -12,11 +17,9 @@ class RentProcessor {
     const { rentFrequency, rentStartDate, rentEndDate } = this.rent
 
     const paymentDates = []
-    const startDate = new Date(rentStartDate)
-    const endDate = new Date(rentEndDate)
-    let currentDate = new Date(startDate)
+    let currentDate = new Date(rentStartDate)
 
-    while (currentDate < endDate) {
+    while (currentDate < rentEndDate) {
       const amount = this.getCurrentRentAmount(currentDate)
 
       paymentDates.push({
@@ -69,9 +72,9 @@ class RentProcessor {
   }
 
   getCurrentRentAmount (date) {
-    const applicableRentChange = this.rentChanges
-      .filter(change => new Date(change.effectiveDate) <= date)
-      .sort((a, b) => new Date(b.effectiveDate) - new Date(a.effectiveDate))[0]
+    const applicableRentChange = this.rentChanges.find(
+      change => new Date(change.effectiveDate) <= date
+    )
 
     return applicableRentChange
       ? applicableRentChange.rentAmount

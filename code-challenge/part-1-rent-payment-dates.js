@@ -4,18 +4,21 @@ Part 1: Rent Payment Dates Calculation
 
 class RentProcessor {
   constructor (rent) {
-    this.rent = rent
+    this.rent = {
+      rentAmount: rent.rentAmount,
+      rentFrequency: rent.rentFrequency,
+      rentStartDate: new Date(rent.rentStartDate),
+      rentEndDate: new Date(rent.rentEndDate)
+    }
   }
 
   calculatePaymentDates () {
     const { rentFrequency, rentStartDate, rentEndDate } = this.rent
 
     const paymentDates = []
-    const startDate = new Date(rentStartDate)
-    const endDate = new Date(rentEndDate)
-    let currentDate = new Date(startDate)
+    let currentDate = new Date(rentStartDate)
 
-    while (currentDate < endDate) {
+    while (currentDate < rentEndDate) {
       paymentDates.push(this.formatPaymentDate(currentDate))
 
       currentDate = this.getNextPaymentDate(currentDate, rentFrequency)

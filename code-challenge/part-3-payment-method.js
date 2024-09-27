@@ -4,20 +4,28 @@ Part 3: Payment Method Consideration
 
 class RentProcessor {
   constructor (rent) {
-    this.rent = rent
+    this.rent = {
+      rentAmount: rent.rentAmount,
+      rentFrequency: rent.rentFrequency,
+      rentStartDate: new Date(rent.rentStartDate),
+      rentEndDate: new Date(rent.rentEndDate),
+      paymentMethod: rent.paymentMethod
+    }
     this.rentChanges = []
   }
 
+  /**
+   * Calculates the payment dates based on the rent details and payment method
+   * @returns {Array<{date: string, amount: number}>} An array of objects with the payment date (string) and amount (number)
+   */
   calculatePaymentDates () {
     const { rentFrequency, rentStartDate, rentEndDate, paymentMethod } =
       this.rent
 
     const paymentDates = []
-    const startDate = new Date(rentStartDate)
-    const endDate = new Date(rentEndDate)
-    let currentDate = new Date(startDate)
+    let currentDate = new Date(rentStartDate)
 
-    while (currentDate < endDate) {
+    while (currentDate < rentEndDate) {
       const amount = this.getCurrentRentAmount(currentDate)
 
       const paymentDate = this.getAdjustedPaymentDate(
@@ -36,6 +44,12 @@ class RentProcessor {
     return paymentDates
   }
 
+  /**
+   * Adjusts the payment date based on the payment method
+   * @param {Date} currentDate - The current payment date
+   * @param {string} paymentMethod - The payment method ('instant', 'creditCard', or 'bankTransfer')
+   * @returns {Date} The adjusted payment date
+   */
   getAdjustedPaymentDate (currentDate, paymentMethod) {
     const paymentDate = new Date(currentDate)
 
@@ -46,22 +60,33 @@ class RentProcessor {
     if (paymentMethod === 'bankTransfer') {
       paymentDate.setDate(paymentDate.getDate() + 3)
     }
+
     return paymentDate
   }
 
+  /**
+   * Applies a rent change
+   * @param {{effectiveDate: string, rentAmount: number}} rentChange - The rent change to apply
+   */
   applyRentChange (rentChange) {
+    const newRentChange = {
+      rentAmount: rentChange.rentAmount,
+      effectiveDate: new Date(rentChange.effectiveDate)
+    }
+
     const existingChangeIndex = this.rentChanges.findIndex(
-      change => change.effectiveDate === rentChange.effectiveDate
+      change =>
+        change.effectiveDate.getTime() === newRentChange.effectiveDate.getTime()
     )
 
     if (existingChangeIndex !== -1) {
-      this.rentChanges[existingChangeIndex] = rentChange
+      this.rentChanges[existingChangeIndex] = newRentChange
     } else {
-      this.rentChanges.push(rentChange)
+      this.rentChanges.push(newRentChange)
     }
 
     this.rentChanges.sort(
-      (a, b) => new Date(b.effectiveDate) - new Date(a.effectiveDate)
+      (a, b) => b.effectiveDate.getTime() - a.effectiveDate.getTime()
     )
   }
 
@@ -69,6 +94,12 @@ class RentProcessor {
     return currentDate.toISOString().split('T')[0]
   }
 
+  /**
+   * Get the next payment date based on the rent frequency
+   * @param {Date} currentDate - The current payment date
+   * @param {string} frequency - The rent frequency
+   * @returns {Date} The next payment date
+   */
   getNextPaymentDate (currentDate, frequency) {
     const nextDate = new Date(currentDate)
 
@@ -88,10 +119,15 @@ class RentProcessor {
     return nextDate
   }
 
+  /**
+   * Get the current rent amount for a given date
+   * @param {Date} date - The date for which to get the rent amount
+   * @returns {number} The current rent amount
+   */
   getCurrentRentAmount (date) {
-    const applicableRentChange = this.rentChanges
-      .filter(change => new Date(change.effectiveDate) <= date)
-      .sort((a, b) => new Date(b.effectiveDate) - new Date(a.effectiveDate))[0]
+    const applicableRentChange = this.rentChanges.find(
+      change => change.effectiveDate <= date
+    )
 
     return applicableRentChange
       ? applicableRentChange.rentAmount
