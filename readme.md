@@ -1,9 +1,18 @@
-
 # RentProcessor
 
+## Overview
 
+This exercise is divided into 3 parts.
+
+.
+└── code-challenge/
+├── part-1-rent-payment-dates.js
+├── part-2-rent-changes.js
+└── part-3-payment-method.js
 
 ## Run Tests
+
+All 3 scenarios are covered in `/code-challenge/__tests__`
 
 Clone the project
 
@@ -42,7 +51,6 @@ Some assumptions encountered:
 - Assumed that the dates provided are in ISO format, so no additional date handling is performed. In an actual project, using a date library is preferred (e.g. date-fns).
 - No assumed specific currency for the amount. In an actual project, using a library for currency is preferred (e.g. Dinero.js)
 - The last payment date must be adjusted to the correct amount. This logic is implemented.
-
 
 ## Author
 
