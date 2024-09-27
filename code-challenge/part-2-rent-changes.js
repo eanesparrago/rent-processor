@@ -34,19 +34,25 @@ class RentProcessor {
   }
 
   applyRentChange (rentChange) {
+    const newRentChange = {
+      rentAmount: rentChange.rentAmount,
+      effectiveDate: new Date(rentChange.effectiveDate)
+    }
+
     const existingChangeIndex = this.rentChanges.findIndex(
-      change => change.effectiveDate === rentChange.effectiveDate
+      change =>
+        change.effectiveDate.getTime() === newRentChange.effectiveDate.getTime()
     )
 
     if (existingChangeIndex !== -1) {
-      this.rentChanges[existingChangeIndex] = rentChange
+      this.rentChanges[existingChangeIndex] = newRentChange
     } else {
-      this.rentChanges.push(rentChange)
+      this.rentChanges.push(newRentChange)
+      // Only sort if a new change was added
+      this.rentChanges.sort(
+        (a, b) => b.effectiveDate.getTime() - a.effectiveDate.getTime()
+      )
     }
-
-    this.rentChanges.sort(
-      (a, b) => new Date(b.effectiveDate) - new Date(a.effectiveDate)
-    )
   }
 
   formatPaymentDate (currentDate) {
@@ -73,7 +79,7 @@ class RentProcessor {
 
   getCurrentRentAmount (date) {
     const applicableRentChange = this.rentChanges.find(
-      change => new Date(change.effectiveDate) <= date
+      change => change.effectiveDate <= date
     )
 
     return applicableRentChange

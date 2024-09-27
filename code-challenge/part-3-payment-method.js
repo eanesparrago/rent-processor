@@ -52,13 +52,13 @@ class RentProcessor {
    */
   getAdjustedPaymentDate (currentDate, paymentMethod) {
     const paymentDate = new Date(currentDate)
-
-    if (paymentMethod === 'creditCard') {
-      paymentDate.setDate(paymentDate.getDate() + 2)
+    const delayDays = {
+      creditCard: 2,
+      bankTransfer: 3
     }
 
-    if (paymentMethod === 'bankTransfer') {
-      paymentDate.setDate(paymentDate.getDate() + 3)
+    if (paymentMethod in delayDays) {
+      paymentDate.setDate(paymentDate.getDate() + delayDays[paymentMethod])
     }
 
     return paymentDate
@@ -83,11 +83,11 @@ class RentProcessor {
       this.rentChanges[existingChangeIndex] = newRentChange
     } else {
       this.rentChanges.push(newRentChange)
+      // Only sort if a new change was added
+      this.rentChanges.sort(
+        (a, b) => b.effectiveDate.getTime() - a.effectiveDate.getTime()
+      )
     }
-
-    this.rentChanges.sort(
-      (a, b) => b.effectiveDate.getTime() - a.effectiveDate.getTime()
-    )
   }
 
   formatPaymentDate (currentDate) {
