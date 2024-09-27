@@ -28,17 +28,34 @@ class RentProcessor {
     while (currentDate < rentEndDate) {
       const amount = this.getCurrentRentAmount(currentDate)
 
-      const paymentDate = this.getAdjustedPaymentDate(
+      const adjustedPaymentDate = this.getAdjustedPaymentDate(
         currentDate,
         paymentMethod
       )
 
-      paymentDates.push({
-        date: this.formatPaymentDate(paymentDate),
-        amount
-      })
+      const nextDate = this.getNextPaymentDate(currentDate, rentFrequency)
 
-      currentDate = this.getNextPaymentDate(currentDate, rentFrequency)
+      if (nextDate > rentEndDate) {
+        // Calculate last payment amount based on remaining days
+        const adjustedAmount = this.getLastPaymentAmount(
+          currentDate,
+          nextDate,
+          rentEndDate,
+          amount
+        )
+
+        paymentDates.push({
+          date: this.formatPaymentDate(adjustedPaymentDate),
+          amount: adjustedAmount
+        })
+      } else {
+        paymentDates.push({
+          date: this.formatPaymentDate(adjustedPaymentDate),
+          amount
+        })
+      }
+
+      currentDate = nextDate
     }
 
     return paymentDates
@@ -94,12 +111,6 @@ class RentProcessor {
     return currentDate.toISOString().split('T')[0]
   }
 
-  /**
-   * Get the next payment date based on the rent frequency
-   * @param {Date} currentDate - The current payment date
-   * @param {string} frequency - The rent frequency
-   * @returns {Date} The next payment date
-   */
   getNextPaymentDate (currentDate, frequency) {
     const nextDate = new Date(currentDate)
 
@@ -119,11 +130,6 @@ class RentProcessor {
     return nextDate
   }
 
-  /**
-   * Get the current rent amount for a given date
-   * @param {Date} date - The date for which to get the rent amount
-   * @returns {number} The current rent amount
-   */
   getCurrentRentAmount (date) {
     const applicableRentChange = this.rentChanges.find(
       change => change.effectiveDate <= date
@@ -132,6 +138,19 @@ class RentProcessor {
     return applicableRentChange
       ? applicableRentChange.rentAmount
       : this.rent.rentAmount
+  }
+
+  getLastPaymentAmount (currentDate, nextDate, rentEndDate, amount) {
+    const totalDays = this.getDaysBetweenDates(currentDate, nextDate)
+    const remainingDays = this.getDaysBetweenDates(currentDate, rentEndDate)
+    const adjustedAmount = (amount * remainingDays) / totalDays
+
+    return Number(adjustedAmount.toFixed(2))
+  }
+
+  getDaysBetweenDates (startDate, endDate) {
+    const oneDay = 24 * 60 * 60 * 1000
+    return Math.round(Math.abs(endDate - startDate) / oneDay)
   }
 }
 

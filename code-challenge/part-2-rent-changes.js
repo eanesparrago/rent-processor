@@ -21,13 +21,29 @@ class RentProcessor {
 
     while (currentDate < rentEndDate) {
       const amount = this.getCurrentRentAmount(currentDate)
+      const nextDate = this.getNextPaymentDate(currentDate, rentFrequency)
 
-      paymentDates.push({
-        date: this.formatPaymentDate(currentDate),
-        amount
-      })
+      if (nextDate > rentEndDate) {
+        // Calculate the remaining days and adjust the last payment amount
+        const adjustedAmount = this.getLastPaymentAmount(
+          currentDate,
+          nextDate,
+          rentEndDate,
+          amount
+        )
 
-      currentDate = this.getNextPaymentDate(currentDate, rentFrequency)
+        paymentDates.push({
+          date: this.formatPaymentDate(currentDate),
+          amount: adjustedAmount
+        })
+      } else {
+        paymentDates.push({
+          date: this.formatPaymentDate(currentDate),
+          amount
+        })
+      }
+
+      currentDate = nextDate
     }
 
     return paymentDates
@@ -85,6 +101,19 @@ class RentProcessor {
     return applicableRentChange
       ? applicableRentChange.rentAmount
       : this.rent.rentAmount
+  }
+
+  getLastPaymentAmount (currentDate, nextDate, rentEndDate, amount) {
+    const totalDays = this.getDaysBetweenDates(currentDate, nextDate)
+    const remainingDays = this.getDaysBetweenDates(currentDate, rentEndDate)
+    const adjustedAmount = (amount * remainingDays) / totalDays
+
+    return Number(adjustedAmount.toFixed(2))
+  }
+
+  getDaysBetweenDates (startDate, endDate) {
+    const oneDay = 24 * 60 * 60 * 1000
+    return Math.round(Math.abs(endDate - startDate) / oneDay)
   }
 }
 

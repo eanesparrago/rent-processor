@@ -49,7 +49,7 @@ describe('RentProcessor', () => {
           { date: '2024-02-12', amount: 1200 },
           { date: '2024-02-26', amount: 1200 },
           { date: '2024-03-11', amount: 1500 },
-          { date: '2024-03-25', amount: 1500 }
+          { date: '2024-03-25', amount: 750 }
         ]
       },
       {
